@@ -24,8 +24,6 @@ export const renderUsersComments = (usersComments, listElement) => {
     </ul>`;
     }).join('');
 
-
-
     const appHtml = `    <div class="container">
     <div id="loader" class="loader">Пожалуйста, подождите, загружаю комментарии...</div>
     <ul id="list" class="comments">
