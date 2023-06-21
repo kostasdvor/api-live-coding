@@ -121,72 +121,76 @@ export function addCommentReplyHandlers() {
 }
 
 toggleLike();
-checkCommentFields();
+// checkCommentFields();
 addCommentReplyHandlers();
 
-listElement.innerHTML = 'Пожалуйста, подождите, загружаю комментарии...';
+// listElement.innerHTML = 'Пожалуйста, подождите, загружаю комментарии...';
+
+
+
+
 
 // Обработчик клика на кнопку "написать"
 
-buttonElement.addEventListener("click", () => {
+// buttonElement.addEventListener("click", () => {
 
-    // Условное ветвление для проверки заполненности input
+//     // Условное ветвление для проверки заполненности input
 
-    inputNameElement.classList.remove('error');
-    inputTextElement.classList.remove('error');
-    buttonElement.classList.remove('error-button');
+//     inputNameElement.classList.remove('error');
+//     inputTextElement.classList.remove('error');
+//     buttonElement.classList.remove('error-button');
 
-    if (inputNameElement.value === "" && inputTextElement.value === "") {
-        inputNameElement.classList.add('error');
-        inputTextElement.classList.add('error');
-        buttonElement.classList.add('error-button');
-        return;
-    } else if (inputNameElement.value === " " || inputTextElement.value === "") {
-        inputTextElement.classList.add('error');
-        buttonElement.classList.add('error-button');
-        return;
-    } else if (inputNameElement.value === "" || inputTextElement.value === " ") {
-        inputNameElement.classList.add('error');
-        buttonElement.classList.add('error-button');
-        return;
-    }
+//     if (inputNameElement.value === "" && inputTextElement.value === "") {
+//         inputNameElement.classList.add('error');
+//         inputTextElement.classList.add('error');
+//         buttonElement.classList.add('error-button');
+//         return;
+//     } else if (inputNameElement.value === " " || inputTextElement.value === "") {
+//         inputTextElement.classList.add('error');
+//         buttonElement.classList.add('error-button');
+//         return;
+//     } else if (inputNameElement.value === "" || inputTextElement.value === " ") {
+//         inputNameElement.classList.add('error');
+//         buttonElement.classList.add('error-button');
+//         return;
+//     }
 
-    // Функция текущей даты и времени
+//     // Функция текущей даты и времени
 
-    function formatDateTime(date) {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear().toString().slice(-2);
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const timeString = hours + ':' + minutes;
-        const formatedDate = `${day}.${month}.${year} ${timeString}`;
-        return formatedDate;
-    }
+//     function formatDateTime(date) {
+//         const day = date.getDate().toString().padStart(2, '0');
+//         const month = (date.getMonth() + 1).toString().padStart(2, '0');
+//         const year = date.getFullYear().toString().slice(-2);
+//         const hours = date.getHours().toString().padStart(2, '0');
+//         const minutes = date.getMinutes().toString().padStart(2, '0');
+//         const timeString = hours + ':' + minutes;
+//         const formatedDate = `${day}.${month}.${year} ${timeString}`;
+//         return formatedDate;
+//     }
 
-    const currentDate = new Date();
-    formatDateTime(currentDate);
+//     const currentDate = new Date();
+//     formatDateTime(currentDate);
 
-    // Пуш комментариев пользователя в массив с заменой html символов 
+//     // Пуш комментариев пользователя в массив с заменой html символов 
 
-    // usersComments.push({
-    //   name: inputNameElement.value
-    //     .replaceAll("&", "&amp;")
-    //     .replaceAll("<", "&lt;")
-    //     .replaceAll(">", "&gt;")
-    //     .replaceAll('"', "&quot;"),
-    //   comment: inputTextElement.value
-    //     .replaceAll("&", "&amp;")
-    //     .replaceAll("<", "&lt;")
-    //     .replaceAll(">", "&gt;")
-    //     .replaceAll('"', "&quot;"),
-    //   time: formatDateTime(currentDate),
-    //   likes: 0,
-    //   isLiked: false,
-    // });
+//     // usersComments.push({
+//     //   name: inputNameElement.value
+//     //     .replaceAll("&", "&amp;")
+//     //     .replaceAll("<", "&lt;")
+//     //     .replaceAll(">", "&gt;")
+//     //     .replaceAll('"', "&quot;"),
+//     //   comment: inputTextElement.value
+//     //     .replaceAll("&", "&amp;")
+//     //     .replaceAll("<", "&lt;")
+//     //     .replaceAll(">", "&gt;")
+//     //     .replaceAll('"', "&quot;"),
+//     //   time: formatDateTime(currentDate),
+//     //   likes: 0,
+//     //   isLiked: false,
+//     // });
 
-    // Получение новых комментов на сервер с помощью API
-    fetchPromise();
-    checkCommentFields();
-});
+//     // Получение новых комментов на сервер с помощью API
+//     fetchPromise();
+//     checkCommentFields();
+// });
 

@@ -1,8 +1,11 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
+import { fetchAndRenderTasks, fetchPromise } from './api.js';
+
 
 export const renderUsersComments = (usersComments, listElement) => {
 
     const appEl = document.getElementById("app");
+
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
         return `<ul id="list" class="comment">
@@ -67,12 +70,28 @@ export const renderUsersComments = (usersComments, listElement) => {
 
 
     appEl.innerHTML = appHtml;
+    const buttonElement = document.getElementById("add-button");
+    const inputNameElement = document.getElementById("name");
+    const inputTextElement = document.getElementById("comment-text");
+
+
+
+
+
     toggleLike();
-    checkCommentFields();
+    // checkCommentFields();
     addCommentReplyHandlers();
 
 
+
+
     buttonElement.addEventListener("click", () => {
+
+        const addForm = document.getElementById("add-form-block");
+
+        loadingForm.style.display = 'block';
+        addForm.style.display = 'none';
+
 
         // Условное ветвление для проверки заполненности input
 
@@ -131,7 +150,7 @@ export const renderUsersComments = (usersComments, listElement) => {
 
         // Получение новых комментов на сервер с помощью API
         fetchPromise();
-        checkCommentFields();
+        // checkCommentFields();
     });
 
 

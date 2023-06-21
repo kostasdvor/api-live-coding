@@ -48,9 +48,12 @@ export const fetchAndRenderTasks = () => {
         });
 }
 
+
+
 let loadingForm = document.querySelector('.form-loading');
-loadingForm.style.display = 'none';
-addForm.style.display = 'block';
+
+// loadingForm.style.display = 'none';
+// addForm.style.display = 'block';
 
 export const fetchPromise = () => {
     return fetch(
