@@ -1,5 +1,5 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
-import { fetchAndRenderTasks, fetchPromise } from './api.js';
+import { fetchAndRenderTasks, fetchComments } from './api.js';
 
 
 export const renderUsersComments = (usersComments, listElement) => {
@@ -84,8 +84,9 @@ export const renderUsersComments = (usersComments, listElement) => {
 
 
 
-
     buttonElement.addEventListener("click", () => {
+
+        fetchComments(text, name);
 
         const addForm = document.getElementById("add-form-block");
 
@@ -149,7 +150,7 @@ export const renderUsersComments = (usersComments, listElement) => {
         // });
 
         // Получение новых комментов на сервер с помощью API
-        fetchPromise();
+
         // checkCommentFields();
     });
 

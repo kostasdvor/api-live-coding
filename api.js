@@ -55,7 +55,7 @@ let loadingForm = document.querySelector('.form-loading');
 // loadingForm.style.display = 'none';
 // addForm.style.display = 'block';
 
-export const fetchPromise = () => {
+export const fetchComments = (text, name) => {
     return fetch(
         host,
         {
@@ -67,8 +67,8 @@ export const fetchPromise = () => {
                 // date: formatDateTime(currentDate),
                 // likes: 0,
                 // isLiked: false,
-                text: inputTextElement.value,
-                name: inputNameElement.value,
+                text: text,
+                name: name,
             }),
         }
     ).then((response) => {
@@ -100,8 +100,8 @@ export const fetchPromise = () => {
             alert("Что-то пошло не так, повторите попытку позже.");
         }
         console.warn(error);
-        loadingForm.style.display = 'block';
-        addForm.style.display = 'none';
+        // loadingForm.style.display = 'block';
+        // addForm.style.display = 'none';
     });
 };
 

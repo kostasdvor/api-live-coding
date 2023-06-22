@@ -1,4 +1,4 @@
-import { fetchAndRenderTasks, fetchPromise } from './api.js';
+import { fetchAndRenderTasks, fetchComments } from './api.js';
 import { renderUsersComments } from "./render.js";
 
 const buttonElement = document.getElementById("add-button");
@@ -190,7 +190,6 @@ addCommentReplyHandlers();
 //     // });
 
 //     // Получение новых комментов на сервер с помощью API
-//     fetchPromise();
 //     checkCommentFields();
 // });
 
