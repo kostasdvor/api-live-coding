@@ -5,6 +5,31 @@ import { fetchAndRenderTasks, fetchComments } from './api.js';
 export const renderUsersComments = (usersComments, listElement) => {
 
     const appEl = document.getElementById("app");
+    let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
+    token = null;
+
+    if (!token) {
+        const appHtml = `   <div class="container"> 
+        <div id="add-form-login" class="add-form">
+            <h3>Форма входа</h3>
+            <input id="login-name" type="text" class="add-form-name" placeholder="Логин" /><br>
+            <input id="login-name" type="text" class="add-form-name" placeholder="Пароль" />
+            <div class="add-form-row">
+                <button id="login-button" class="adds-button">Войти</button>
+            </div>
+        </div>
+        </div>
+    `;
+        appEl.innerHTML = appHtml;
+
+        document.getElementById("login-button").addEventListener('click', () => {
+            token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';  
+            fetchAndRenderTasks();
+        });
+
+        return;
+        
+    }
 
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
@@ -43,30 +68,8 @@ export const renderUsersComments = (usersComments, listElement) => {
             <button id="add-button" class="add-form-button">Написать</button>
         </div>
     </div>
-    <div id="add-form-block" class="add-form">
-        <h3>Форма входа</h3>
-        <input id="name" type="text" class="add-form-name" placeholder="Имя" /><br>
-        <input id="name" type="text" class="add-form-name" placeholder="Логин" /><br>
-        <input id="name" type="text" class="add-form-name" placeholder="Пароль" />
-        <div class="add-form-row">
-            <button id="add-button" class="add-form-button">Войти</button>
-        </div>
-    </div>
-
 </div>
 `
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     appEl.innerHTML = appHtml;
@@ -85,6 +88,9 @@ export const renderUsersComments = (usersComments, listElement) => {
 
 
     buttonElement.addEventListener("click", () => {
+
+        let text = inputTextElement.value;
+        let name = inputNameElement.value;
 
         fetchComments(text, name);
 
