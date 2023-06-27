@@ -1,35 +1,57 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
-import { fetchAndRenderTasks, fetchComments } from './api.js';
+import { fetchAndRenderTasks, fetchComments, login } from './api.js';
 
 
 export const renderUsersComments = (usersComments, listElement) => {
 
     const appEl = document.getElementById("app");
     let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
-    token = null;
+    // token = null;
 
-    if (!token) {
-        const appHtml = `   <div class="container"> 
-        <div id="add-form-login" class="add-form">
-            <h3>Форма входа</h3>
-            <input id="login-name" type="text" class="add-form-name" placeholder="Логин" /><br>
-            <input id="login-name" type="text" class="add-form-name" placeholder="Пароль" />
-            <div class="add-form-row">
+    function renderLoginForm() {
+        if (!token) {
+            const appHtml = `
+            <div class="container"> 
+            <div id="add-form-login" class="add-form">
+                <h3>Форма входа</h3>
+                <input id="login-name" type="text" class="add-form-name" placeholder="Логин" /><br>
+                <input id="login-password" type="password" class="add-form-name" placeholder="Пароль" />
+                <div class="add-form-row">
                 <button id="login-button" class="adds-button">Войти</button>
+                </div>
             </div>
-        </div>
-        </div>
-    `;
-        appEl.innerHTML = appHtml;
+            </div>
+        `;
+            appEl.innerHTML = appHtml;
 
-        document.getElementById("login-button").addEventListener('click', () => {
-            token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';  
-            fetchAndRenderTasks();
-        });
+            document.getElementById("login-button").addEventListener('click', () => {
 
-        return;
-        
+                const loginUser = document.getElementById("login-name");
+                const password = document.getElementById("login-password");
+
+                if(!loginUser) {
+                    alert('писька');
+                    return;
+                }
+
+                if(!password) {
+                    alert('сосиська');
+                    return;
+                }
+
+                login({
+                    login: "admin",
+                    password: "admin",
+                }).then((user) => {
+                    token = `Bearer ${user.user.token}`;
+                    fetchAndRenderTasks();
+                })
+            });
+        }
     }
+
+    renderLoginForm();
+
 
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
@@ -68,24 +90,35 @@ export const renderUsersComments = (usersComments, listElement) => {
             <button id="add-button" class="add-form-button">Написать</button>
         </div>
     </div>
+    <p id="ass">Чтобы добавить комментарий, <span id="auth">авторизуйтесь</span>.</p>
 </div>
 `
 
-
     appEl.innerHTML = appHtml;
+
+
+
+    const addForm = document.getElementById("add-form-block");
+    addForm.style.display = token ? 'block' : 'none';
+    // addForm.style.display = 'none';
+
+
+
+    let authSpan = document.getElementById("auth");
+    authSpan.addEventListener("click", function () {
+        token = null;
+        renderLoginForm();
+    });
+
+
+
     const buttonElement = document.getElementById("add-button");
     const inputNameElement = document.getElementById("name");
     const inputTextElement = document.getElementById("comment-text");
 
-
-
-
-
     toggleLike();
     // checkCommentFields();
     addCommentReplyHandlers();
-
-
 
     buttonElement.addEventListener("click", () => {
 
@@ -95,7 +128,7 @@ export const renderUsersComments = (usersComments, listElement) => {
         fetchComments(text, name);
 
         const addForm = document.getElementById("add-form-block");
-
+        let loadingForm = document.querySelector('.form-loading');
         loadingForm.style.display = 'block';
         addForm.style.display = 'none';
 
@@ -154,8 +187,6 @@ export const renderUsersComments = (usersComments, listElement) => {
         //   likes: 0,
         //   isLiked: false,
         // });
-
-        // Получение новых комментов на сервер с помощью API
 
         // checkCommentFields();
     });

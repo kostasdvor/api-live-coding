@@ -2,13 +2,10 @@ import { usersComments, updateUsersComments } from "./main.js";
 import { renderUsersComments } from "./render.js";
 
 const listElement = document.getElementById("list");
-const inputNameElement = document.getElementById("name");
-const inputTextElement = document.getElementById("comment-text");
-const addForm = document.getElementById("add-form-block");
 const host = 'https://webdev-hw-api.vercel.app/api/v2/kostasdvor/comments';
 let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 
-export const fetchAndRenderTasks = () => {
+export const fetchAndRenderTasks = (token) => {
     return fetch(
         host,
         {
@@ -41,16 +38,14 @@ export const fetchAndRenderTasks = () => {
             });
             updateUsersComments(appComments);
 
-            renderUsersComments(usersComments, listElement);
+            renderUsersComments(appComments, listElement);
         }).catch((error) => {
             alert("Что-то пошло не так, повторите попытку позже.");
             console.warn(error);
         });
 }
 
-
-
-let loadingForm = document.querySelector('.form-loading');
+// let loadingForm = document.querySelector('.form-loading');
 
 // loadingForm.style.display = 'none';
 // addForm.style.display = 'block';
@@ -82,12 +77,6 @@ export const fetchComments = (text, name) => {
     }).then((responseData) => {
         return fetchAndRenderTasks();
     }).then(() => {
-        // addForm.innerHTML = `<input id="name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
-        // <textarea id="comment-text" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-        // rows="4"></textarea>
-        // <div class="add-form-row">
-        // <button id="add-button" class="add-form-button">Написать</button>
-        // </div>`;
         // loadingForm.style.display = 'none';
         // addForm.style.display = 'block';
         renderUsersComments(usersComments, listElement);
@@ -104,6 +93,20 @@ export const fetchComments = (text, name) => {
         // addForm.style.display = 'none';
     });
 };
+
+
+export function login({ login, password }) {
+    return fetch("https://wedev-api.sky.pro/api/user/login", {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
 
 
 
