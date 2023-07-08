@@ -1,14 +1,17 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
 import { fetchAndRenderTasks, fetchComments, login } from './api.js';
 
+let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 
 export const renderUsersComments = (usersComments, listElement) => {
 
     const appEl = document.getElementById("app");
-    let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
+
+
+
     // token = null;
 
-    function renderLoginForm() {
+    function renderLoginForm(token) {
         if (!token) {
             const appHtml = `
             <div class="container"> 
@@ -24,35 +27,40 @@ export const renderUsersComments = (usersComments, listElement) => {
         `;
             appEl.innerHTML = appHtml;
 
+
+
+
             document.getElementById("login-button").addEventListener('click', () => {
 
-                const loginUser = document.getElementById("login-name");
-                const password = document.getElementById("login-password");
+                const loginUser = document.getElementById("login-name").value;
+                const password = document.getElementById("login-password").value;
 
-                if(!loginUser) {
-                    alert('писька');
+
+                if (!loginUser) {
+                    alert('Введите логин');
                     return;
                 }
 
-                if(!password) {
-                    alert('сосиська');
+                if (!password) {
+                    alert('Введите пароль');
                     return;
                 }
 
                 login({
-                    login: "admin",
-                    password: "admin",
+                    login: loginUser,
+                    password: password,
                 }).then((user) => {
                     token = `Bearer ${user.user.token}`;
-                    fetchAndRenderTasks();
+                    updateFormDisplay();
+                    fetchAndRenderTasks(token);
+                }).catch(error => {
+                    alert(error.message);
                 })
             });
         }
     }
 
     renderLoginForm();
-
-
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
         return `<ul id="list" class="comment">
@@ -96,20 +104,47 @@ export const renderUsersComments = (usersComments, listElement) => {
 
     appEl.innerHTML = appHtml;
 
+    // const addForm = document.getElementById("add-form-block");
 
-
-    const addForm = document.getElementById("add-form-block");
-    addForm.style.display = token ? 'block' : 'none';
     // addForm.style.display = 'none';
 
 
 
-    let authSpan = document.getElementById("auth");
-    authSpan.addEventListener("click", function () {
-        token = null;
+    // let isUserAuthenticated = false;
+    // function hiddenAddForm() {
+    //     if (isUserAuthenticated) {
+    //         addForm.classList.remove("hidden");
+    //     } else {
+    //         addForm.classList.add("hidden");
+    //     }
+    // };
+
+    // hiddenAddForm();
+
+
+    const authSpan = document.getElementById("auth");
+    authSpan.addEventListener("click", function (token) {
+        // token = null;
         renderLoginForm();
     });
 
+    const addForm = document.getElementById("add-form-block");
+
+    // addForm.style.display = token ? 'none' : 'block';
+
+    function updateFormDisplay() {
+        if (!token) {
+            addForm.style.display = 'block';
+        } else {
+            addForm.style.display = 'none';
+        }
+    }
+    
+
+    // updateFormDisplay();
+    
+
+    updateFormDisplay(token);
 
 
     const buttonElement = document.getElementById("add-button");
@@ -130,7 +165,6 @@ export const renderUsersComments = (usersComments, listElement) => {
         const addForm = document.getElementById("add-form-block");
         let loadingForm = document.querySelector('.form-loading');
         loadingForm.style.display = 'block';
-        addForm.style.display = 'none';
 
 
         // Условное ветвление для проверки заполненности input

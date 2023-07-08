@@ -8,6 +8,10 @@ const inputTextElement = document.getElementById("comment-text");
 const addForm = document.getElementById("add-form-block");
 let currenDate = new Date();
 
+
+// fetchAndRenderTasks();
+
+
 export let usersComments = [
 
 ];

@@ -37,7 +37,6 @@ export const fetchAndRenderTasks = (token) => {
                 };
             });
             updateUsersComments(appComments);
-
             renderUsersComments(appComments, listElement);
         }).catch((error) => {
             alert("Что-то пошло не так, повторите попытку позже.");
@@ -103,7 +102,13 @@ export function login({ login, password }) {
             password,
         }),
     }).then((response) => {
+        if (response.status === 400) {
+            throw new Error("Неверный логин или пароль")
+        }
         return response.json();
+    }).then((user) => {
+        renderUsersComments(usersComments, listElement);
+        return user;
     });
 }
 
