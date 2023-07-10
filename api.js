@@ -3,7 +3,7 @@ import { renderUsersComments } from "./render.js";
 
 const listElement = document.getElementById("list");
 const host = 'https://webdev-hw-api.vercel.app/api/v2/kostasdvor/comments';
-let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
+// let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 
 export const fetchAndRenderTasks = (token) => {
     return fetch(
@@ -49,7 +49,7 @@ export const fetchAndRenderTasks = (token) => {
 // loadingForm.style.display = 'none';
 // addForm.style.display = 'block';
 
-export const fetchComments = (text, name) => {
+export const fetchComments = (text, name, token) => {
     return fetch(
         host,
         {
