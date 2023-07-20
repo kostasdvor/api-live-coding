@@ -55,7 +55,7 @@ export const fetchComments = (text, name, token) => {
         {
             method: "POST",
             headers: {
-                Authorization: token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k',
+                Authorization: token,
             },
             body: JSON.stringify({
                 // date: formatDateTime(currentDate),
@@ -97,6 +97,9 @@ export const fetchComments = (text, name, token) => {
 export function login({ login, password }) {
     return fetch("https://wedev-api.sky.pro/api/user/login", {
         method: "POST",
+        headers: {
+            token: 'asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k',
+        },
         body: JSON.stringify({
             login,
             password,

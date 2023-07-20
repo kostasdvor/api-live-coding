@@ -74,7 +74,7 @@ export const renderUsersComments = (usersComments, listElement) => {
 
 
 
-	renderLoginForm();
+	renderLoginForm(token);
 
 	const usersCommentsHTML = usersComments.map((usersComment, index) => {
 		return `<ul id="list" class="comment">
@@ -117,6 +117,9 @@ export const renderUsersComments = (usersComments, listElement) => {
 `
 
 	appEl.innerHTML = appHtml;
+
+
+
 
 	// const addForm = document.getElementById("add-form-block");
 
@@ -183,8 +186,9 @@ export const renderUsersComments = (usersComments, listElement) => {
 
 		let text = inputTextElement.value;
 		let name = inputNameElement.value;
+        token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 
-		fetchComments(text, name, token);
+		fetchComments(text, name, token);   
 
 		const addForm = document.getElementById("add-form-block");
 		let loadingForm = document.querySelector('.form-loading');
