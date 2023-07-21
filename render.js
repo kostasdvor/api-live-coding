@@ -1,25 +1,17 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
 import { fetchAndRenderTasks, fetchComments, login } from './api.js';
 
-// let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 let token;
-
 let logged = false;
-
 let commentAuthor = "";
-
 
 export const renderUsersComments = (usersComments, listElement) => {
 
-	const appEl = document.getElementById("app");
+    const appEl = document.getElementById("app");
 
-
-
-	// token = null;
-
-	function renderLoginForm(token) {		
-		if (!token) {
-			const appHtml = `
+    function renderLoginForm() {
+        if (!token) {
+            const appHtml = `
             <div class="container"> 
             <div id="add-form-login" class="add-form">
                 <h3>Форма входа</h3>
@@ -31,53 +23,42 @@ export const renderUsersComments = (usersComments, listElement) => {
             </div>
             </div>
         `;
-			appEl.innerHTML = appHtml;
+            appEl.innerHTML = appHtml;
 
+            document.getElementById("login-button").addEventListener('click', () => {
 
+                const loginUser = document.getElementById("login-name").value;
+                const password = document.getElementById("login-password").value;
 
+                if (!loginUser) {
+                    alert('Введите логин');
+                    return;
+                }
 
-			
+                if (!password) {
+                    alert('Введите пароль');
+                    return;
+                }
 
-			document.getElementById("login-button").addEventListener('click', () => {
+                login({
+                    login: loginUser,
+                    password: password,
+                }).then((user) => {
+                    token = `Bearer ${user.user.token}`;
+                    logged = true;
+                    commentAuthor = loginUser;
+                    fetchAndRenderTasks(token);
+                }).catch(error => {
+                    alert(error.message);
+                })
+            });
+        }
+    }
 
-				const loginUser = document.getElementById("login-name").value;
-				const password = document.getElementById("login-password").value;
+    renderLoginForm(token);
 
-
-				if (!loginUser) {
-					alert('Введите логин');
-					return;
-				}
-
-				if (!password) {
-					alert('Введите пароль');
-					return;
-				}
-
-				
-
-				login({
-					login: loginUser,
-					password: password,
-				}).then((user) => {
-					token = `Bearer ${user.user.token}`;
-					logged = true;
-					commentAuthor = loginUser;
-					// updateFormDisplay();
-					fetchAndRenderTasks(token);
-				}).catch(error => {
-					alert(error.message);
-				})
-			});
-		}
-	}
-
-
-
-	renderLoginForm(token);
-
-	const usersCommentsHTML = usersComments.map((usersComment, index) => {
-		return `<ul id="list" class="comment">
+    const usersCommentsHTML = usersComments.map((usersComment, index) => {
+        return `<ul id="list" class="comment">
         <div class="comment-header">
         <div>${usersComment.name}</div>
         <div>${usersComment.date}</div>
@@ -94,9 +75,9 @@ export const renderUsersComments = (usersComments, listElement) => {
         </div>
         </div>
     </ul>`;
-	}).join('');
+    }).join('');
 
-	const appHtml = `    <div class="container">
+    const appHtml = `    <div class="container">
     <div id="loader" class="loader">Пожалуйста, подождите, загружаю комментарии...</div>
     <ul id="list" class="comments">
     ${usersCommentsHTML}
@@ -115,143 +96,108 @@ export const renderUsersComments = (usersComments, listElement) => {
     <p id="authorization">Чтобы добавить комментарий, <span id="auth">авторизуйтесь</span>.</p>
 </div>
 `
+    appEl.innerHTML = appHtml;
 
-	appEl.innerHTML = appHtml;
+    const authSpan = document.getElementById("auth");
+    authSpan.addEventListener("click", function (token) {
+        renderLoginForm();
+    });
 
+    const addForm = document.getElementById("add-form-block");
+    const auth = document.getElementById("authorization");
 
+    function updateAddForm(logged) {
+        if (!logged) {
+            addForm.style.display = 'none';
+        } else {
+            addForm.style.display = 'block';
+        }
+    }
 
+    function updateAuth(logged) {
+        if (logged) {
+            auth.style.display = 'none';
+        } else {
+            auth.style.display = 'block';
+        }
+    }
 
-	// const addForm = document.getElementById("add-form-block");
+    updateAddForm(logged);
+    updateAuth(logged);
 
-	// addForm.style.display = 'none';
+    const buttonElement = document.getElementById("add-button");
+    const inputNameElement = document.getElementById("name");
+    const inputTextElement = document.getElementById("comment-text");
 
+    toggleLike();
+    addCommentReplyHandlers();
 
+    buttonElement.addEventListener("click", () => {
 
-	// let isUserAuthenticated = false;
-	// function hiddenAddForm() {
-	//     if (isUserAuthenticated) {
-	//         addForm.classList.remove("hidden");
-	//     } else {
-	//         addForm.classList.add("hidden");
-	//     }
-	// };
+        let text = inputTextElement.value;
+        let name = inputNameElement.value;
 
-	// hiddenAddForm();
+        fetchComments(text, name, token);
 
+        const addForm = document.getElementById("add-form-block");
+        let loadingForm = document.querySelector('.form-loading');
+        loadingForm.style.display = 'block';
 
-	const authSpan = document.getElementById("auth");
-	authSpan.addEventListener("click", function (token) {
-		// token = null;
-		renderLoginForm();
-	});
+        inputNameElement.classList.remove('error');
+        inputTextElement.classList.remove('error');
+        buttonElement.classList.remove('error-button');
 
+        if (inputNameElement.value === "" && inputTextElement.value === "") {
+            inputNameElement.classList.add('error');
+            inputTextElement.classList.add('error');
+            buttonElement.classList.add('error-button');
+            return;
+        } else if (inputNameElement.value === " " || inputTextElement.value === "") {
+            inputTextElement.classList.add('error');
+            buttonElement.classList.add('error-button');
+            return;
+        } else if (inputNameElement.value === "" || inputTextElement.value === " ") {
+            inputNameElement.classList.add('error');
+            buttonElement.classList.add('error-button');
+            return;
+        }
 
-	const addForm = document.getElementById("add-form-block");
-	const auth = document.getElementById("authorization");
+        // Функция текущей даты и времени
 
+        function formatDateTime(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear().toString().slice(-2);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const timeString = hours + ':' + minutes;
+            const formatedDate = `${day}.${month}.${year} ${timeString}`;
+            return formatedDate;
+        }
 
-	// addForm.style.display = token ? 'none' : 'block';
+        const currentDate = new Date();
+        formatDateTime(currentDate);
 
-	function updateAddForm(logged) {
-		if (!logged) {
-			addForm.style.display = 'none';
-		} else {
-			addForm.style.display = 'block';
-		}
-	}
+        // Пуш комментариев пользователя в массив с заменой html символов 
 
-	function updateAuth(logged) {
-		if (logged) {
-			auth.style.display = 'none';
-		} else {
-			auth.style.display = 'block';
-		}
-	}
-	
+        // usersComments.push({
+        //   name: inputNameElement.value
+        //     .replaceAll("&", "&amp;")
+        //     .replaceAll("<", "&lt;")
+        //     .replaceAll(">", "&gt;")
+        //     .replaceAll('"', "&quot;"),
+        //   comment: inputTextElement.value
+        //     .replaceAll("&", "&amp;")
+        //     .replaceAll("<", "&lt;")
+        //     .replaceAll(">", "&gt;")
+        //     .replaceAll('"', "&quot;"),
+        //   time: formatDateTime(currentDate),
+        //   likes: 0,
+        //   isLiked: false,
+        // });
 
-	
-	updateAddForm(logged);
-	updateAuth(logged);
-
-
-	const buttonElement = document.getElementById("add-button");
-	const inputNameElement = document.getElementById("name");
-	const inputTextElement = document.getElementById("comment-text");
-
-	toggleLike();
-	// checkCommentFields();
-	addCommentReplyHandlers();
-
-	buttonElement.addEventListener("click", () => {
-
-		let text = inputTextElement.value;
-		let name = inputNameElement.value;
-        token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
-
-		fetchComments(text, name, token);   
-
-		const addForm = document.getElementById("add-form-block");
-		let loadingForm = document.querySelector('.form-loading');
-		loadingForm.style.display = 'block';
-
-
-		// Условное ветвление для проверки заполненности input
-
-		inputNameElement.classList.remove('error');
-		inputTextElement.classList.remove('error');
-		buttonElement.classList.remove('error-button');
-
-		if (inputNameElement.value === "" && inputTextElement.value === "") {
-			inputNameElement.classList.add('error');
-			inputTextElement.classList.add('error');
-			buttonElement.classList.add('error-button');
-			return;
-		} else if (inputNameElement.value === " " || inputTextElement.value === "") {
-			inputTextElement.classList.add('error');
-			buttonElement.classList.add('error-button');
-			return;
-		} else if (inputNameElement.value === "" || inputTextElement.value === " ") {
-			inputNameElement.classList.add('error');
-			buttonElement.classList.add('error-button');
-			return;
-		}
-
-		// Функция текущей даты и времени
-
-		function formatDateTime(date) {
-			const day = date.getDate().toString().padStart(2, '0');
-			const month = (date.getMonth() + 1).toString().padStart(2, '0');
-			const year = date.getFullYear().toString().slice(-2);
-			const hours = date.getHours().toString().padStart(2, '0');
-			const minutes = date.getMinutes().toString().padStart(2, '0');
-			const timeString = hours + ':' + minutes;
-			const formatedDate = `${day}.${month}.${year} ${timeString}`;
-			return formatedDate;
-		}
-
-		const currentDate = new Date();
-		formatDateTime(currentDate);
-
-		// Пуш комментариев пользователя в массив с заменой html символов 
-
-		// usersComments.push({
-		//   name: inputNameElement.value
-		//     .replaceAll("&", "&amp;")
-		//     .replaceAll("<", "&lt;")
-		//     .replaceAll(">", "&gt;")
-		//     .replaceAll('"', "&quot;"),
-		//   comment: inputTextElement.value
-		//     .replaceAll("&", "&amp;")
-		//     .replaceAll("<", "&lt;")
-		//     .replaceAll(">", "&gt;")
-		//     .replaceAll('"', "&quot;"),
-		//   time: formatDateTime(currentDate),
-		//   likes: 0,
-		//   isLiked: false,
-		// });
-
-		// checkCommentFields();
-	});
+        // checkCommentFields();
+    });
 
 
 };

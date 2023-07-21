@@ -8,10 +8,6 @@ const inputTextElement = document.getElementById("comment-text");
 const addForm = document.getElementById("add-form-block");
 let currenDate = new Date();
 
-
-// fetchAndRenderTasks();
-
-
 export let usersComments = [
 
 ];
@@ -21,7 +17,6 @@ export function updateUsersComments(newComments) {
 };
 
 fetchAndRenderTasks();
-// renderUsersComments(usersComments, listElement);
 
 //Хорошая функция добавления лайка с использованием stopPropagation
 
@@ -45,7 +40,6 @@ export function toggleLike() {
         })
     }
 };
-
 
 // Функция отключения кнопки "написать" при незаполненных input
 
@@ -80,6 +74,5 @@ export function addCommentReplyHandlers() {
 }
 
 toggleLike();
-// checkCommentFields();
 addCommentReplyHandlers();
 

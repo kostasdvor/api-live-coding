@@ -3,7 +3,6 @@ import { renderUsersComments } from "./render.js";
 
 const listElement = document.getElementById("list");
 const host = 'https://webdev-hw-api.vercel.app/api/v2/kostasdvor/comments';
-// let token = 'Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k';
 
 export const fetchAndRenderTasks = (token) => {
     return fetch(
@@ -44,11 +43,6 @@ export const fetchAndRenderTasks = (token) => {
         });
 }
 
-// let loadingForm = document.querySelector('.form-loading');
-
-// loadingForm.style.display = 'none';
-// addForm.style.display = 'block';
-
 export const fetchComments = (text, name, token) => {
     return fetch(
         host,
@@ -58,9 +52,6 @@ export const fetchComments = (text, name, token) => {
                 Authorization: token,
             },
             body: JSON.stringify({
-                // date: formatDateTime(currentDate),
-                // likes: 0,
-                // isLiked: false,
                 text: text,
                 name: name,
             }),
@@ -76,8 +67,6 @@ export const fetchComments = (text, name, token) => {
     }).then((responseData) => {
         return fetchAndRenderTasks();
     }).then(() => {
-        // loadingForm.style.display = 'none';
-        // addForm.style.display = 'block';
         renderUsersComments(usersComments, listElement);
     }).catch((error) => {
         if (error.message === "Сервер упал") {
@@ -88,18 +77,12 @@ export const fetchComments = (text, name, token) => {
             alert("Что-то пошло не так, повторите попытку позже.");
         }
         console.warn(error);
-        // loadingForm.style.display = 'block';
-        // addForm.style.display = 'none';
     });
 };
-
 
 export function login({ login, password }) {
     return fetch("https://wedev-api.sky.pro/api/user/login", {
         method: "POST",
-        headers: {
-            token: 'asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k',
-        },
         body: JSON.stringify({
             login,
             password,
