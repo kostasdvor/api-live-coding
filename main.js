@@ -3,8 +3,9 @@ import { renderUsersComments } from "./render.js";
 
 const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");
+
 const inputNameElement = document.getElementById("name");
-const inputTextElement = document.getElementById("comment-text");
+
 const addForm = document.getElementById("add-form-block");
 let currenDate = new Date();
 
@@ -23,7 +24,7 @@ fetchAndRenderTasks();
 export function toggleLike() {
 
     const likeButtons = document.querySelectorAll('.like-button');
-    addCommentReplyHandlers();
+    // addCommentReplyHandlers();
 
     for (const button of likeButtons) {
         button.addEventListener('click', function (event) {
@@ -61,6 +62,7 @@ export function checkCommentFields() {
 
 export function addCommentReplyHandlers() {
     const commentElements = document.querySelectorAll(".comment");
+    const inputTextElement = document.getElementById("comment-text");
 
     for (const commentElement of commentElements) {
         commentElement.addEventListener("click", (event) => {
@@ -73,6 +75,53 @@ export function addCommentReplyHandlers() {
     }
 }
 
+
+
+// export function addCommentReplyHandlers() {
+//     const commentElements = document.querySelectorAll(".comment");
+
+//     for (const commentElement of commentElements) {
+//         commentElement.addEventListener("click", (event) => {
+//             const authorElement = commentElement.querySelector(".comment-header div:first-child");
+//             const textElement = commentElement.querySelector(".comment-text");
+
+//             const author = authorElement.textContent.trim();
+//             const text = textElement.textContent.trim();
+
+//             inputTextElement.value = `>${text}\n@${author}, `;
+//             inputTextElement.focus();
+//         });
+//     }
+// }
+
+// ... (остальной код main.js)
+
+// Функция для ответа на комментарий
+
+// export function addCommentReplyHandlers() {
+//     const commentElements = document.querySelectorAll(".comment");
+
+//     if (!inputTextElement) {
+//         console.error("Element with id 'comment-text' not found!");
+//         return;
+//     }
+
+//     for (const commentElement of commentElements) {
+//         commentElement.addEventListener("click", (event) => {
+//             const authorElement = commentElement.querySelector(".comment-header div:first-child");
+//             const textElement = commentElement.querySelector(".comment-text");
+
+//             const author = authorElement.textContent.trim();
+//             const text = textElement.textContent.trim();
+
+//             inputTextElement.value = `>${text}\n@${author}, `;
+//             inputTextElement.focus();
+//         });
+//     }
+// }
+
+
+
 toggleLike();
-addCommentReplyHandlers();
+// addCommentReplyHandlers();
 

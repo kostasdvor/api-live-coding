@@ -2,6 +2,7 @@ import { usersComments, updateUsersComments } from "./main.js";
 import { renderUsersComments } from "./render.js";
 
 const listElement = document.getElementById("list");
+
 const host = 'https://webdev-hw-api.vercel.app/api/v2/kostasdvor/comments';
 
 export const fetchAndRenderTasks = (token) => {
@@ -60,6 +61,8 @@ export const fetchComments = (text, name, token) => {
         if (response.status === 500) {
             throw new Error("Сервер упал");
         } else if (response.status === 400) {
+            let loadingForm = document.querySelector('.form-loading');
+            loadingForm.style.display = 'none';
             throw new Error("Плохой запрос");
         } else {
             return response.json();
@@ -74,7 +77,7 @@ export const fetchComments = (text, name, token) => {
         } else if (error.message === "Плохой запрос") {
             alert("Поля ввода должны содержать минимум 3 символа");
         } else {
-            alert("Что-то пошло не так, повторите попытку позже.");
+            alert("Нет доступа к интернету");
         }
         console.warn(error);
     });
