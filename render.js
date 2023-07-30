@@ -58,6 +58,7 @@ export const renderUsersComments = (usersComments, listElement) => {
     renderLoginForm(token);
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
+        const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
         return `<ul id="list" class="comment">
         <div class="comment-header">
         <div>${usersComment.name}</div>
@@ -72,6 +73,7 @@ export const renderUsersComments = (usersComments, listElement) => {
         <div class="likes">
             <span id="like-count" class="likes-counter">${usersComment.likes}</span>
             <button id="like" data-index="${index}" class="like-button liked ${usersComment.isLiked ? '-active-like' : ''}"></button>
+            <p><i>Комментарий создан: ${createDate}</i></p>
         </div>
         </div>
     </ul>`;
