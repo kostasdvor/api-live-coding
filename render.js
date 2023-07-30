@@ -1,8 +1,61 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
+import { fetchAndRenderTasks, fetchComments, login } from './api.js';
+
+let token;
+let logged = false;
+let commentAuthor = "";
 
 export const renderUsersComments = (usersComments, listElement) => {
 
     const appEl = document.getElementById("app");
+
+    function renderLoginForm() {
+        if (!token) {
+            const appHtml = `
+            <div class="container"> 
+            <div id="add-form-login" class="add-form">
+                <h3>Форма входа</h3>
+                <input id="login-name" type="text" class="add-form-name" placeholder="Логин" /><br>
+                <input id="login-password" type="password" class="add-form-name" placeholder="Пароль" />
+                <div class="add-form-row">
+                <button id="login-button" class="adds-button">Войти</button>
+                </div>
+            </div>
+            </div>
+        `;
+            appEl.innerHTML = appHtml;
+
+            document.getElementById("login-button").addEventListener('click', () => {
+
+                const loginUser = document.getElementById("login-name").value;
+                const password = document.getElementById("login-password").value;
+
+                if (!loginUser) {
+                    alert('Введите логин');
+                    return;
+                }
+
+                if (!password) {
+                    alert('Введите пароль');
+                    return;
+                }
+
+                login({
+                    login: loginUser,
+                    password: password,
+                }).then((user) => {
+                    token = `Bearer ${user.user.token}`;
+                    logged = true;
+                    commentAuthor = loginUser;
+                    fetchAndRenderTasks(token);
+                }).catch(error => {
+                    alert(error.message);
+                })
+            });
+        }
+    }
+
+    renderLoginForm(token);
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
         return `<ul id="list" class="comment">
@@ -24,8 +77,6 @@ export const renderUsersComments = (usersComments, listElement) => {
     </ul>`;
     }).join('');
 
-
-
     const appHtml = `    <div class="container">
     <div id="loader" class="loader">Пожалуйста, подождите, загружаю комментарии...</div>
     <ul id="list" class="comments">
@@ -35,48 +86,62 @@ export const renderUsersComments = (usersComments, listElement) => {
         Комментарий добавляется...
     </div>
     <div id="add-form-block" class="add-form">
-        <input id="name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
+        <input value=${commentAuthor} disabled id="name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
         <textarea id="comment-text" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
             rows="4"></textarea>
         <div class="add-form-row">
             <button id="add-button" class="add-form-button">Написать</button>
         </div>
     </div>
-    <div id="add-form-block" class="add-form">
-        <h3>Форма входа</h3>
-        <input id="name" type="text" class="add-form-name" placeholder="Имя" /><br>
-        <input id="name" type="text" class="add-form-name" placeholder="Логин" /><br>
-        <input id="name" type="text" class="add-form-name" placeholder="Пароль" />
-        <div class="add-form-row">
-            <button id="add-button" class="add-form-button">Войти</button>
-        </div>
-    </div>
-
+    <p id="authorization">Чтобы добавить комментарий, <span id="auth">авторизуйтесь</span>.</p>
 </div>
 `
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     appEl.innerHTML = appHtml;
-    toggleLike();
-    checkCommentFields();
-    addCommentReplyHandlers();
 
+    const authSpan = document.getElementById("auth");
+    authSpan.addEventListener("click", function (token) {
+        renderLoginForm();
+    });
+
+    const addForm = document.getElementById("add-form-block");
+    const auth = document.getElementById("authorization");
+
+    function updateAddForm(logged) {
+        if (!logged) {
+            addForm.style.display = 'none';
+        } else {
+            addForm.style.display = 'block';
+        }
+    }
+
+    function updateAuth(logged) {
+        if (logged) {
+            auth.style.display = 'none';
+        } else {
+            auth.style.display = 'block';
+        }
+    }
+
+    updateAddForm(logged);
+    updateAuth(logged);
+
+    const buttonElement = document.getElementById("add-button");
+    const inputNameElement = document.getElementById("name");
+    const inputTextElement = document.getElementById("comment-text");
+
+    toggleLike();
+    addCommentReplyHandlers();
 
     buttonElement.addEventListener("click", () => {
 
-        // Условное ветвление для проверки заполненности input
+        let text = inputTextElement.value;
+        let name = inputNameElement.value;
+
+        fetchComments(text, name, token);
+
+        const addForm = document.getElementById("add-form-block");
+        let loadingForm = document.querySelector('.form-loading');
+        loadingForm.style.display = 'block';
 
         inputNameElement.classList.remove('error');
         inputTextElement.classList.remove('error');
@@ -131,9 +196,7 @@ export const renderUsersComments = (usersComments, listElement) => {
         //   isLiked: false,
         // });
 
-        // Получение новых комментов на сервер с помощью API
-        fetchPromise();
-        checkCommentFields();
+        // checkCommentFields();
     });
 
 
