@@ -1,6 +1,6 @@
 import { fetchAndRenderTasks, fetchComments } from './api.js';
 import { renderUsersComments } from "./render.js";
-import { format } from "date-fns";
+
 
 const buttonElement = document.getElementById("add-button");
 const listElement = document.getElementById("list");

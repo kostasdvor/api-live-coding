@@ -1,5 +1,6 @@
 import { usersComments, updateUsersComments } from "./main.js";
 import { renderUsersComments } from "./render.js";
+// import { format } from "date-fns";
 
 const listElement = document.getElementById("list");
 
@@ -18,19 +19,20 @@ export const fetchAndRenderTasks = (token) => {
         .then((response) => response.json())
         .then((responseData) => {
             const appComments = responseData.comments.map((comment) => {
-                const commentDate = new Date(comment.date);
-                const day = commentDate.getDate();
-                const month = commentDate.getMonth() + 1;
-                const year = commentDate.getFullYear();
-                const formattedDate = `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}.${year}`;
-                const hours = commentDate.getHours();
-                const minutes = commentDate.getMinutes();
-                const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-                const formattedDateTime = `${formattedDate} ${formattedTime}`;
+                // const createDate = format(new Date(comment.created_at), 'dd/MM/yyyy hh:mm');
+                // const commentDate = new Date(comment.date);
+                // const day = commentDate.getDate();
+                // const month = commentDate.getMonth() + 1;
+                // const year = commentDate.getFullYear();
+                // const formattedDate = `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}.${year}`;
+                // const hours = commentDate.getHours();
+                // const minutes = commentDate.getMinutes();
+                // const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+                // const formattedDateTime = `${formattedDate} ${formattedTime}`;
 
                 return {
                     name: comment.author.name,
-                    date: formattedDateTime,
+                    // date: createDate,
                     text: comment.text,
                     likes: comment.likes,
                     isLikes: false,

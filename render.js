@@ -1,5 +1,7 @@
 import { toggleLike, checkCommentFields, addCommentReplyHandlers } from "./main.js";
 import { fetchAndRenderTasks, fetchComments, login } from './api.js';
+import { format } from "date-fns";
+
 
 let token;
 let logged = false;
@@ -58,7 +60,8 @@ export const renderUsersComments = (usersComments, listElement) => {
     renderLoginForm(token);
 
     const usersCommentsHTML = usersComments.map((usersComment, index) => {
-        const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
+
+        const createDate = format(new Date(usersComments.created_at), "dd/MM/yyyy hh:mm");
         return `<ul id="list" class="comment">
         <div class="comment-header">
         <div>${usersComment.name}</div>
@@ -166,19 +169,19 @@ export const renderUsersComments = (usersComments, listElement) => {
 
         // Функция текущей даты и времени
 
-        function formatDateTime(date) {
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear().toString().slice(-2);
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const timeString = hours + ':' + minutes;
-            const formatedDate = `${day}.${month}.${year} ${timeString}`;
-            return formatedDate;
-        }
+        // function formatDateTime(date) {
+        //     const day = date.getDate().toString().padStart(2, '0');
+        //     const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        //     const year = date.getFullYear().toString().slice(-2);
+        //     const hours = date.getHours().toString().padStart(2, '0');
+        //     const minutes = date.getMinutes().toString().padStart(2, '0');
+        //     const timeString = hours + ':' + minutes;
+        //     const formatedDate = `${day}.${month}.${year} ${timeString}`;
+        //     return formatedDate;
+        // }
 
-        const currentDate = new Date();
-        formatDateTime(currentDate);
+        // const currentDate = new Date();
+        // formatDateTime(currentDate);
 
         // Пуш комментариев пользователя в массив с заменой html символов 
 
